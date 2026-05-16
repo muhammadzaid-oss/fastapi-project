@@ -1,0 +1,44 @@
+[cite_start]name: Asynchronous Suites Quality Gate [cite: 58]
+
+on:
+  push:
+    [cite_start]branches: [ master, main ] [cite: 61]
+  pull_request:
+    [cite_start]branches: [ master, main ] [cite: 61]
+
+jobs:
+  test-suite:
+    [cite_start]runs-on: ubuntu-latest [cite: 58]
+
+    services:
+      # Database aur Memory isolation container automatic spawn karne ke liye (As per PDF)
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_PASSWORD: secretpassword
+          POSTGRES_DB: test_db
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5 [cite: 58]
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: Install Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install fastapi uvicorn pytest httpx passlib[bcrypt] pyjwt python-multipart email-validator
+
+    - name: Run Asynchronous Test Suites
+      run: |
+        pytest [cite: 58]
