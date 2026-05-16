@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Zero-Trust Auth Interface</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #1e1e2e; color: #cdd6f4; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .container { background-color: #313244; padding: 30px; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.3); width: 380px; text-align: center; }
+        h2 { color: #89b4fa; margin-bottom: 20px; }
+        input { width: 90%; padding: 12px; margin: 10px 0; border-radius: 6px; border: 1px solid #45475a; background-color: #1e1e2e; color: #fff; font-size: 14px; }
+        button { width: 96%; padding: 12px; background-color: #89b4fa; border: none; border-radius: 6px; color: #11111b; font-weight: bold; font-size: 16px; cursor: pointer; margin-top: 15px; transition: 0.2s; }
+        button:hover { background-color: #b4befe; }
+        .toggle-link { margin-top: 15px; font-size: 14px; color: #a6adc8; }
+        .toggle-link a { color: #f5c2e7; text-decoration: none; font-weight: bold; }
+        .status-box { margin-top: 20px; padding: 10px; background-color: #181825; border-radius: 6px; font-size: 12px; text-align: left; word-break: break-all; max-height: 120px; overflow-y: auto; display: none; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2 id="form-title">Create Account (Signup)</h2>
+    
+    <input type="text" id="username" placeholder="Enter Username">
+    <input type="email" id="email" placeholder="Enter Email Address">
+    <input type="password" id="password" placeholder="Enter Password">
+    
+    <button onclick="submitForm()" id="submit-btn">Register Now</button>
+    
+    <div class="toggle-link" id="toggle-text">
+        Pehle se account hai? <a href="#" onclick="switchMode(true)">Log In Karein</a>
+    </div>
+
+    <div class="status-box" id="status-box"></div>
+</div>
+
+<script>
+    let isLoginMode = false;
+    let savedAccessToken = "";
+    let savedRefreshToken = "";
+
+    function switchMode(toLogin) {
+        isLoginMode = toLogin;
+        const title = document.getElementById('form-title');
+        const usernameInput = document.getElementById('username');
+        const btn = document.getElementById('submit-btn');
+        const toggleText = document.getElementById('toggle-text');
+
+        if (isLoginMode) {
+            title.innerText = "Welcome Back (Login)";
+            usernameInput.style.display = "none";
+            btn.innerText = "Log In";
+            toggleText.innerHTML = "Naya account banana hai? <a href='#' onclick='switchMode(false)'>Sign Up Karein</a>";
+        } else {
+            title.innerText = "Create Account (Signup)";
+            usernameInput.style.display = "block";
+            btn.innerText = "Register Now";
+            toggleText.innerHTML = "Pehle se account hai? <a href='#' onclick='switchMode(true)'>Log In Karein</a>";
+        }
+    }
+
+    async function submitForm() {
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        const statusBox = document.getElementById('status-box');
+        
+        if (!isLoginMode) {
+            const username = document.getElementById('username').value;
+            const res = await fetch('/signup', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, email, password })
+            });
+            const data = await res.json();
+            if (res.status === 201) {
+                alert("Signup Kamyab! Ab login karein.");
+                switchMode(true);
+            } else {
+                alert("Error: " + (data.detail || "Signup fail ho gaya"));
+            }
+        } else {
+            const res = await fetch('/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
+            });
+            const data = await res.json();
+            if (res.status === 200) {
+                savedAccessToken = data.access_token;
+                savedRefreshToken = data.refresh_token;
+                alert("Login Kamyab! Tokens received perfectly.");
+                
+                statusBox.style.display = "block";
+                statusBox.innerHTML = `<b>Access Token:</b><br>${savedAccessToken}<br><br><b>Refresh Token:</b><br>${savedRefreshToken}`;
+            } else {
+                alert("Error: " + (data.detail || "Login fail"));
+            }
+        }
+    }
+</script>
+
+</body>
+</html>
