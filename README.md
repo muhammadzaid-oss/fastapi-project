@@ -1,30 +1,37 @@
-# 🚀 FastAPI Web Application
+# 🚀 FastAPI Dynamic Web Application
 
-A clean, asynchronous production-ready backend web application built using **FastAPI** and integrated with automated testing and modern deployment practices.
+An enterprise-grade, asynchronous backend web application built using the **FastAPI** framework. This repository features a clean architecture, dynamic HTML rendering templates, structured unit testing using **Pytest**, and an automated CI/CD pipeline integrated via **GitHub Actions**.
+
+---
 
 ## 🌟 Key Features
 
-* ⚡ **Fully Asynchronous:** Built on FastAPI for high-performance non-blocking asynchronous requests.
-* 🎨 **HTML Templates UI:** Built-in dynamic front-end rendering using FastAPI's Template system.
-* 🧪 **Automated Test Suite:** Includes comprehensive backend functionality tests powered by **Pytest**.
-* 🔄 **CI/CD Pipeline:** Fully configured automation using **GitHub Actions workflow** to verify code on every push.
+* ⚡ **Asynchronous Core:** Engineered with Python's modern `async/await` ecosystem for non-blocking, high-performance request handling.
+* 🎨 **Dynamic UI Rendering:** Fully integrated with FastAPI's template configuration to serve interactive front-end HTML views seamlessly.
+* 🧪 **Automated Testing Suite:** Robust test cases powered by **Pytest** ensuring secure, bug-free endpoint executions before deployment.
+* 🔄 **Production-Ready CI/CD:** Fully automated deployment verification using **GitHub Actions Workflows** triggered on every branch commit.
 
 ---
 
-## 🛠️ Tech Stack
+## 🛠️ Technology Stack & Tools
 
-| Technology | Purpose |
-| :--- | :--- |
-| **FastAPI** | Core Backend Framework |
-| **Uvicorn** | ASGI Web Server |
-| **Pytest** | Automated Backend Testing |
-| **GitHub Actions** | Automated CI/CD Testing Pipeline |
+| Component | Technology | Purpose |
+| :--- | :--- | :--- |
+| **Backend Framework** | FastAPI | High-performance, async web API development |
+| **ASGI Server** | Uvicorn | Production-ready, lightning-fast application server |
+| **Front-End Engine** | Jinja2 Templates | Dynamic server-side HTML rendering |
+| **Testing Suite** | Pytest / TestClient | Local and automated endpoint validation |
+| **Automation Pipeline** | GitHub Actions | Automated continuous integration (CI) tests |
 
 ---
 
-## 🚀 Getting Started
+## 📂 Project Directory Structure
 
-### 1. Clone the Repository
-```bash
-git clone [https://github.com/muhammadzaid-oss/fastapi-project.git](https://github.com/muhammadzaid-oss/fastapi-project.git)
-cd fastapi-project
+```text
+fastapi-project/
+├── .github/
+│   └── workflows/        # Automated GitHub Actions CI configurations
+├── templates/            # Dynamic HTML files served by Jinja2 templates
+├── main.py               # Core application entry point and API endpoints
+├── test_main.py          # Python testing file for automated validation
+└── README.md             # Detailed documentation and architectural overview
